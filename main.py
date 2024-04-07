@@ -1,11 +1,20 @@
 import requests
 import time
 
-
 API_URL = 'https://api.telegram.org/bot'
 BOT_TOKEN = '6954004997:AAF7O9aP9XhQiLQbakGEIjsijrN7gI_xANE'
 TEXT_RESPONSE = 'Ого! Ты мне прислал {}!'
 MAX_COUNTER = 100
+MEDIA_NAMES = {
+    'text': 'текст',
+    'photo': 'фото',
+    'sticker': 'стикер',
+    'voice': 'голосовое сообщение',
+    'video': 'видео',
+    'animation': 'гифку',
+    'video_note': 'кружок',
+    'document': 'документ'
+}
 
 offset = -2
 counter = 0
@@ -21,23 +30,12 @@ while counter < MAX_COUNTER:
             offset = result['update_id']
             chat_id = result['message']['from']['id']
             message = result['message']
-            if 'text' in message:
-                text = message['text']
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Текст")}')
-            elif 'photo' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Фотка")}')
-            elif 'sticker' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Стикер")}')
-            elif 'voice' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Голосовое сообщение")}')
-            elif 'video' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Видео")}')
-            elif 'animation' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Гифка")}')
-            elif 'video_note' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Кружок")}')
-            elif 'document' in message:
-                requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format("Какой-то документ")}')
+            media_types = ['text', 'photo', 'sticker', 'voice', 'video', 'animation', 'video_note', 'document']
+            for media_type in media_types:
+                if media_type in message:
+                    russian_name = MEDIA_NAMES.get(media_type, media_type)
+                    requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format(russian_name)}')
+                    break
 
     time.sleep(1)
     counter += 1
