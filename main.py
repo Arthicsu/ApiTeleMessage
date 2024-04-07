@@ -33,8 +33,8 @@ while counter < MAX_COUNTER:
             media_types = ['text', 'photo', 'sticker', 'voice', 'video', 'animation', 'video_note', 'document']
             for media_type in media_types:
                 if media_type in message:
-                    russian_name = MEDIA_NAMES.get(media_type, media_type)
-                    requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format(russian_name)}')
+                    answer = MEDIA_NAMES.get(media_type, media_type)
+                    requests.get(f'{API_URL}{BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={TEXT_RESPONSE.format(answer)}')
                     break
 
     time.sleep(1)
